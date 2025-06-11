@@ -10,11 +10,14 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
-  WORKING_DIRECTORY: /src
+  WORKING_DIRECTORY: ./src
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run: 
+        working-directory: src
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET SDK
@@ -24,10 +27,10 @@ jobs:
         include-prerelease: true
         
     - name: Build with dotnet
-      run: dotnet build "./src" --configuration Release
+      run: dotnet build --configuration Release
       
     - name: dotnet publish
-      run: dotnet publish "./src" -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
       
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
