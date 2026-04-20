@@ -8,7 +8,7 @@
 # 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
 #    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
 #
-# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
+# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE_PROD, paste the publish profile contents as the value of the secret.
 #    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
 #
 # 3. Create a secret in your repository named AZURE_WEBAPP_NAME, and update the value to the name of your Azure App Service.
@@ -78,14 +78,14 @@ jobs:
       - name: Validate deployment secrets
         env:
           AZURE_WEBAPP_NAME: ${{ secrets.AZURE_WEBAPP_NAME }}
-          AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          AZURE_WEBAPP_PUBLISH_PROFILE_PROD: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD }}
         run: |
           if [ -z "$AZURE_WEBAPP_NAME" ]; then
             echo "Missing secret: AZURE_WEBAPP_NAME"
             exit 1
           fi
-          if [ -z "$AZURE_WEBAPP_PUBLISH_PROFILE" ]; then
-            echo "Missing secret: AZURE_WEBAPP_PUBLISH_PROFILE"
+          if [ -z "$AZURE_WEBAPP_PUBLISH_PROFILE_PROD" ]; then
+            echo "Missing secret: AZURE_WEBAPP_PUBLISH_PROFILE_PROD"
             exit 1
           fi
 
@@ -100,5 +100,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
